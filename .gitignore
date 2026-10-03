@@ -1,1 +1,3 @@
 icmc.env
+tests/__pycache__
+src/protocol/__pycache__

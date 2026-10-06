@@ -1,0 +1,58 @@
+{
+  "signs": {
+    "feeding": {
+      "not_able_to_feed_at_all": "Infant cannot feed at all",
+      "not_feeding_well": "Infant is not feeding well on observation",
+      "breastfeeding_less_than_8_times_24h": "Breastfed fewer than 8 times in 24 hours",
+      "not_well_attached": "Not well attached to breast",
+      "not_sucking_effectively": "Not sucking effectively",
+      "receives_other_foods": "Receives foods or drinks other than breastmilk"
+    },
+    "neurological": {
+      "convulsions": "Convulsions / fits",
+      "movement_only_when_stimulated": "Moves only when stimulated, then stops",
+      "no_movement_at_all": "No movement at all",
+      "restless_irritable": "Restless and irritable"
+    },
+    "respiratory": {
+      "severe_chest_indrawing": "Severe chest indrawing",
+      "fast_breathing_60_plus_under_7_days": "Fast breathing (>=60/min) in infant <7 days old",
+      "fast_breathing_60_plus_7_to_59_days": "Fast breathing (>=60/min) in infant 7-59 days old",
+      "stridor": "Stridor"
+    },
+    "temperature": {
+      "high_temp_38_plus": "Axillary temperature >= 38C",
+      "low_temp_below_35_5": "Axillary temperature < 35.5C"
+    },
+    "skin_umbilicus": {
+      "umbilicus_red_or_pus": "Umbilicus red or draining pus",
+      "skin_pustules": "Skin pustules"
+    },
+    "hydration": {
+      "sunken_eyes": "Sunken eyes",
+      "skin_pinch_very_slow": "Skin pinch goes back very slowly (>2s)",
+      "skin_pinch_slow": "Skin pinch goes back slowly"
+    },
+    "jaundice": {
+      "palms_soles_yellow": "Palms or soles yellow",
+      "jaundice_present": "Jaundice present",
+      "jaundice_increasing": "Jaundice not decreasing"
+    },
+    "weight": {
+      "weight_under_2kg": "Weight < 2 kg",
+      "weight_for_age_below_minus_2z": "Weight for age < -2 Z score"
+    },
+    "mouth": {
+      "thrush": "Ulcers or white patches in mouth"
+    },
+    "hiv": {
+      "mother_hiv_positive": "Mother HIV positive",
+      "infant_virological_positive": "Infant virological test positive",
+      "hiv_test_not_done": "HIV test not done for mother or infant"
+    },
+    "duration": {
+      "jaundice_beyond_3_weeks": "Jaundice beyond 3 weeks of age",
+      "diarrhoea_stopped": "Diarrhoea has stopped"
+    }
+  }
+}

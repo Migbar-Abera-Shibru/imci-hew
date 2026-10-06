@@ -1,0 +1,12 @@
+icmc.env
+tests/__pycache__
+src/protocol/__pycache__
+
+models/
+*.safetensors
+*.gguf
+train/outputs/
+train/outputs_stage2/
+__pycache__/
+.pytest_cache/
+icmc.env/

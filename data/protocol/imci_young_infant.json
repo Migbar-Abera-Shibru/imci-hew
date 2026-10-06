@@ -1,0 +1,472 @@
+{
+  "protocol_metadata": {
+    "name": "IMCI Young Infant Protocol",
+    "source": "WHO IMCI Chart Booklet, Management of the Sick Young Infant Aged Up to 2 Months, 2019",
+    "isbn": "978-92-4-151636-5",
+    "age_range": "0 to 2 months (0-59 days)",
+    "scope": "Initial visit assessment and classification",
+    "version": "1.0-hackathon",
+    "encoded_by": "IMCI-HEW Assistant Project"
+  },
+
+  "entry_point": "assess_young_infant",
+
+  "decision_nodes": {
+
+    "assess_young_infant": {
+      "type": "assessment_sequence",
+      "description": "Initial visit. Assess the young infant in this exact order.",
+      "sequence": [
+        "check_psbi",
+        "check_jaundice",
+        "check_diarrhoea",
+        "check_hiv",
+        "check_feeding_and_weight",
+        "check_immunization"
+      ],
+      "note": "All classifications from all checks must be collected. Multiple classifications can co-exist. Treatment follows all applicable classifications."
+    },
+
+    "check_psbi": {
+      "type": "classification",
+      "node_id": "check_psbi",
+      "source": "IMCI Chart Booklet 2019, p.5",
+      "title": "Check for Possible Serious Bacterial Infection, Very Severe Disease, Pneumonia, or Local Bacterial Infection",
+      "required_signs": [
+        "not_able_to_feed_at_all",
+        "not_feeding_well",
+        "convulsions",
+        "severe_chest_indrawing",
+        "high_temp_38_plus",
+        "low_temp_below_35_5",
+        "movement_only_when_stimulated",
+        "no_movement_at_all",
+        "fast_breathing_60_plus_under_7_days",
+        "fast_breathing_60_plus_7_to_59_days",
+        "umbilicus_red_or_pus",
+        "skin_pustules"
+      ],
+      "classifications": [
+        {
+          "name": "POSSIBLE_SERIOUS_BACTERIAL_INFECTION",
+          "criteria_any_of": [
+            "not_able_to_feed_at_all",
+            "not_feeding_well",
+            "convulsions",
+            "severe_chest_indrawing",
+            "high_temp_38_plus",
+            "low_temp_below_35_5",
+            "movement_only_when_stimulated",
+            "no_movement_at_all",
+            "fast_breathing_60_plus_under_7_days"
+          ],
+          "priority": 1,
+          "severity": "critical",
+          "actions": {
+            "urgent_pre_referral": [
+              "Give first dose of intramuscular antibiotics (gentamicin + ampicillin).",
+              "Treat to prevent low blood sugar.",
+              "Advise the mother how to keep the infant warm on the way to hospital.",
+              "Refer URGENTLY to hospital."
+            ],
+            "if_referral_refused_or_not_feasible": {
+              "see_node": "psbi_referral_refused"
+            }
+          }
+        },
+        {
+          "name": "VERY_SEVERE_DISEASE",
+          "criteria_any_of": [
+            "fast_breathing_60_plus_under_7_days"
+          ],
+          "priority": 1,
+          "severity": "critical",
+          "actions": {
+            "note": "Shares action pathway with POSSIBLE_SERIOUS_BACTERIAL_INFECTION.",
+            "urgent_pre_referral": [
+              "Give first dose of intramuscular antibiotics (gentamicin + ampicillin).",
+              "Treat to prevent low blood sugar.",
+              "Advise the mother how to keep the infant warm on the way to hospital.",
+              "Refer URGENTLY to hospital."
+            ]
+          }
+        },
+        {
+          "name": "PNEUMONIA",
+          "criteria_any_of": [
+            "fast_breathing_60_plus_7_to_59_days"
+          ],
+          "priority": 3,
+          "severity": "moderate",
+          "actions": {
+            "treatment": [
+              "Give oral amoxicillin for 7 days.",
+              "Advise the mother to give home care.",
+              "Follow up in 3 days."
+            ]
+          }
+        },
+        {
+          "name": "LOCAL_BACTERIAL_INFECTION",
+          "criteria_any_of": [
+            "umbilicus_red_or_pus",
+            "skin_pustules"
+          ],
+          "priority": 4,
+          "severity": "moderate",
+          "actions": {
+            "treatment": [
+              "Give amoxicillin for 5 days.",
+              "Teach the mother how to treat local infections at home.",
+              "Advise the mother to give home care.",
+              "Follow up in 2 days."
+            ]
+          }
+        },
+        {
+          "name": "INFECTION_UNLIKELY",
+          "criteria_any_of": [],
+          "priority": 5,
+          "severity": "none",
+          "default": true,
+          "actions": {
+            "advice": [
+              "Advise the mother on giving home care to the young infant."
+            ]
+          }
+        }
+      ],
+      "resolution_rule": "Select highest-priority classification whose criteria_any_of is satisfied. Only one PSBI-family classification is reported, but it can co-exist with classifications from other check nodes (jaundice, diarrhoea, etc.)."
+    },
+
+    "check_jaundice": {
+      "type": "classification",
+      "node_id": "check_jaundice",
+      "source": "IMCI Chart Booklet 2019, p.6 and p.26",
+      "title": "Check for Jaundice",
+      "required_signs": [
+        "palms_soles_yellow",
+        "jaundice_present",
+        "jaundice_increasing",
+        "jaundice_beyond_3_weeks"
+      ],
+      "classifications": [
+        {
+          "name": "SEVERE_JAUNDICE",
+          "criteria_any_of": [
+            "palms_soles_yellow"
+          ],
+          "priority": 1,
+          "severity": "critical",
+          "actions": {
+            "treatment": [
+              "Refer URGENTLY to hospital."
+            ]
+          }
+        },
+        {
+          "name": "JAUNDICE_NOT_DECREASING",
+          "criteria_any_of": [
+            "jaundice_present"
+          ],
+          "priority": 2,
+          "severity": "moderate",
+          "actions": {
+            "treatment": [
+              "Advise the mother about home care.",
+              "Ask her to return for follow-up the next day."
+            ]
+          }
+        },
+        {
+          "name": "JAUNDICE_IMPROVING",
+          "criteria_any_of": [],
+          "priority": 3,
+          "severity": "low",
+          "default": true,
+          "actions": {
+            "treatment": [
+              "Reassure the mother, continue home care.",
+              "Return for follow-up when the infant is 3 weeks of age."
+            ]
+          }
+        }
+      ],
+      "follow_up": {
+        "interval_days": 1,
+        "if_jaundice_beyond_3_weeks": "Refer to hospital for further assessment."
+      }
+    },
+
+    "check_diarrhoea": {
+      "type": "classification",
+      "node_id": "check_diarrhoea",
+      "source": "IMCI Chart Booklet 2019, p.7 and p.15-16",
+      "title": "Check for Diarrhoea and Dehydration",
+      "gate_question": "Does the young infant have diarrhoea? (Stools changed from usual pattern, frequent and watery)",
+      "required_signs": [
+        "restless_irritable",
+        "movement_only_when_stimulated",
+        "no_movement_at_all",
+        "sunken_eyes",
+        "skin_pinch_very_slow",
+        "skin_pinch_slow",
+        "diarrhoea_stopped"
+      ],
+      "classifications": [
+        {
+          "name": "SEVERE_DEHYDRATION",
+          "criteria": {
+            "count_at_least": 2,
+            "signs": [
+              "movement_only_when_stimulated",
+              "no_movement_at_all",
+              "sunken_eyes",
+              "skin_pinch_very_slow"
+            ]
+          },
+          "priority": 1,
+          "severity": "critical",
+          "actions": {
+            "if_no_other_severe_classification": [
+              "Give fluid for severe dehydration (Plan C)."
+            ],
+            "if_other_severe_classification_present": [
+              "Refer URGENTLY to hospital.",
+              "Give frequent sips of ORS on the way.",
+              "Advise the mother to continue breastfeeding.",
+              "Advise the mother how to keep the infant warm on the way."
+            ],
+            "see_node": "plan_c"
+          }
+        },
+        {
+          "name": "SOME_DEHYDRATION",
+          "criteria": {
+            "count_at_least": 2,
+            "signs": [
+              "restless_irritable",
+              "sunken_eyes",
+              "skin_pinch_slow"
+            ]
+          },
+          "priority": 2,
+          "severity": "moderate",
+          "actions": {
+            "treatment": [
+              "Give fluid and breastmilk for some dehydration (Plan B)."
+            ],
+            "if_other_severe_classification_present": [
+              "Refer URGENTLY to hospital with frequent sips of ORS on the way.",
+              "Advise the mother to continue breastfeeding."
+            ],
+            "advise_when_to_return": "Immediately if signs worsen.",
+            "follow_up": "2 days if no improvement."
+          }
+        },
+        {
+          "name": "NO_DEHYDRATION",
+          "criteria": {
+            "count_at_least": 0,
+            "signs": []
+          },
+          "priority": 3,
+          "severity": "low",
+          "default": true,
+          "actions": {
+            "treatment": [
+              "Give fluids and breastmilk at home (Plan A)."
+            ],
+            "advise_when_to_return": "Immediately if signs worsen.",
+            "follow_up": "2 days if no improvement."
+          }
+        }
+      ]
+    },
+
+    "plan_c": {
+      "type": "flowchart",
+      "node_id": "plan_c",
+      "source": "IMCI Chart Booklet 2019, p.16",
+      "title": "Plan C: Treat Severe Dehydration Quickly",
+      "decision_path": [
+        {
+          "question": "Can you give intravenous fluid immediately?",
+          "yes": {
+            "actions": [
+              "Start intravenous fluid immediately.",
+              "If the young infant can drink, give ORS by mouth while the drip is being set up.",
+              "Give 100 mL/kg body weight of Ringer's lactate solution (or normal saline if not available).",
+              "For infants <12 months: first give 30 mL/kg in 1 hour, then 70 mL/kg in 5 hours.",
+              "Reassess the young infant every 1-2 hours. If hydration not improving, give the intravenous drip more rapidly.",
+              "Also give ORS (about 5 mL/kg body weight per hour) as soon as the young infant can drink, usually after 3-4 hours."
+            ]
+          },
+          "no": {
+            "next_question": "Is intravenous treatment available nearby (within 30 minutes)?",
+            "yes": {
+              "actions": [
+                "Refer URGENTLY for intravenous treatment.",
+                "If the infant can drink, give the mother ORS solution and show her how to give frequent sips during the trip.",
+                "Or give ORS by nasogastric tube."
+              ]
+            },
+            "no": {
+              "next_question": "Are you trained to use a nasogastric tube for rehydration?",
+              "yes": {
+                "actions": [
+                  "Start rehydration by tube (or mouth) with ORS solution: give 20 mL/kg body weight per hour for 6 hours (total 120 mL/kg body weight).",
+                  "Reassess the young infant every 1-2 hours while waiting for transfer.",
+                  "If the infant vomits repeatedly or has abdominal distension, give the fluid more slowly.",
+                  "If hydration is not improving after 3 hours, send the young infant for intravenous therapy.",
+                  "After 6 hours, reassess the young infant. Classify dehydration. Then choose the appropriate plan (A, B, or C) to continue treatment."
+                ]
+              },
+              "no": {
+                "next_question": "Can the young infant drink?",
+                "yes": {
+                  "actions": [
+                    "Start rehydration by mouth with ORS solution: give 20 mL/kg body weight per hour for 6 hours (total 120 mL/kg body weight).",
+                    "Reassess the young infant every 1-2 hours while waiting for transfer.",
+                    "If the infant vomits repeatedly or has abdominal distension, give the fluid more slowly.",
+                    "If hydration is not improving after 3 hours, send the young infant for intravenous therapy."
+                  ]
+                },
+                "no": {
+                  "actions": [
+                    "Refer URGENTLY to hospital for intravenous or nasogastric treatment."
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "note": "If the young infant is not referred to hospital, observe for at least 6 hours after rehydration to be sure the mother can maintain hydration giving ORS by mouth."
+    },
+
+    "psbi_referral_refused": {
+      "type": "classification",
+      "node_id": "psbi_referral_refused",
+      "source": "IMCI Chart Booklet 2019, p.17",
+      "title": "If Referral Is Refused or Not Feasible: Further Classify",
+      "when_to_use": "Infant was classified with POSSIBLE_SERIOUS_BACTERIAL_INFECTION or VERY_SEVERE_DISEASE, but referral is refused or not feasible.",
+      "required_signs": [
+        "convulsions",
+        "not_able_to_feed_at_all",
+        "no_movement_at_all",
+        "weight_under_2kg",
+        "not_feeding_well",
+        "high_temp_38_plus",
+        "low_temp_below_35_5",
+        "severe_chest_indrawing",
+        "movement_only_when_stimulated",
+        "fast_breathing_60_plus_under_7_days"
+      ],
+      "classifications": [
+        {
+          "name": "CRITICAL_ILLNESS",
+          "criteria_any_of": [
+            "convulsions",
+            "not_able_to_feed_at_all",
+            "no_movement_at_all",
+            "weight_under_2kg"
+          ],
+          "priority": 1,
+          "severity": "critical",
+          "actions": {
+            "treatment": [
+              "Reinforce URGENT referral. Explain to the caregiver that the infant is very sick and must be urgently referred.",
+              "If referral is still not feasible: give once-daily intramuscular gentamicin and twice-daily intramuscular ampicillin until referral is feasible or for 7 days.",
+              "Treat to prevent low blood sugar.",
+              "Teach the mother how to keep the young infant warm at home.",
+              "Advise the mother to return daily for injections.",
+              "Treat any other classification of illness in the young infant.",
+              "Reassess the young infant at each visit."
+            ]
+          }
+        },
+        {
+          "name": "CLINICAL_SEVERE_INFECTION",
+          "criteria_any_of": [
+            "not_feeding_well",
+            "high_temp_38_plus",
+            "low_temp_below_35_5",
+            "severe_chest_indrawing",
+            "movement_only_when_stimulated"
+          ],
+          "priority": 2,
+          "severity": "severe",
+          "actions": {
+            "treatment": [
+              "Give once-daily intramuscular gentamicin and oral amoxicillin for 7 days.",
+              "Treat to prevent low blood sugar.",
+              "Teach the mother how to keep the young infant warm at home.",
+              "Advise the mother to return for the next injection the following day.",
+              "Treat any other classification of illness in the young infant.",
+              "Reassess the young infant at each visit."
+            ]
+          }
+        },
+        {
+          "name": "SEVERE_PNEUMONIA_REFERRAL_REFUSED",
+          "criteria_any_of": [
+            "fast_breathing_60_plus_under_7_days"
+          ],
+          "priority": 3,
+          "severity": "severe",
+          "actions": {
+            "treatment": [
+              "Give oral amoxicillin for 7 days.",
+              "Teach the mother how to give oral amoxicillin twice daily.",
+              "Treat any other classification of illness in the young infant.",
+              "Advise the mother to return for follow-up in 3 days."
+            ]
+          }
+        }
+      ],
+      "resolution_rule": "Select highest-priority classification whose criteria_any_of is satisfied."
+    }
+  },
+
+  "clinical_priority_order": [
+    "POSSIBLE_SERIOUS_BACTERIAL_INFECTION",
+    "VERY_SEVERE_DISEASE",
+    "CRITICAL_ILLNESS",
+    "SEVERE_DEHYDRATION",
+    "CLINICAL_SEVERE_INFECTION",
+    "SEVERE_PNEUMONIA_REFERRAL_REFUSED",
+    "SEVERE_JAUNDICE",
+    "PNEUMONIA",
+    "SOME_DEHYDRATION",
+    "JAUNDICE_NOT_DECREASING",
+    "LOCAL_BACTERIAL_INFECTION",
+    "JAUNDICE_IMPROVING",
+    "NO_DEHYDRATION",
+    "INFECTION_UNLIKELY"
+  ],
+
+  "follow_up_schedule": {
+    "JAUNDICE": 1,
+    "DIARRHOEA": 2,
+    "FEEDING_PROBLEM": 2,
+    "THRUSH": 2,
+    "LOCAL_BACTERIAL_INFECTION": 2,
+    "PNEUMONIA": 3,
+    "SEVERE_PNEUMONIA_when_referral_refused": 3,
+    "LOW_WEIGHT_FOR_AGE_not_breastfed": 7,
+    "LOW_WEIGHT_FOR_AGE_breastfed": 14,
+    "CONFIRMED_HIV_OR_EXPOSED": "per national guidelines"
+  },
+
+  "return_immediately_signs": [
+    "breastfeeding_poorly",
+    "reduced_activity",
+    "becomes_sicker",
+    "develops_fever",
+    "feels_unusually_cold",
+    "develops_fast_breathing",
+    "develops_difficult_breathing",
+    "palms_or_soles_appear_yellow"
+  ]
+}
